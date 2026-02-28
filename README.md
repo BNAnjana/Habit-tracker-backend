@@ -55,9 +55,21 @@ GET /api/achievements
 
 ---
 
+### Reports Routes
+
+GET /api/reports
+
+---
+
 ### Analytics Routes
 
 GET /api/analytics  
+
+---
+
+### Challenges Routes
+
+GET /api/challenges 
 
 ---
 
@@ -68,31 +80,66 @@ GET /api/analytics
 - name
 - email
 - password
+- created_at
 
 ### HABITS
-- id
+- id (UUID)
 - user_id
 - title
 - difficulty
 - target_value
+- created_at
 
 ### HABIT_LOGS
-- id
+- id (UUID)
 - habit_id
 - completed_date
 - value
+- created_at
 
 ### STREAKS
+- id (UUID)
 - habit_id
 - current_streak
 - longest_streak
+- updated_at
 
 ### ACHIEVEMENTS
+- id (UUID)
 - user_id
 - title
 - description
+- unlocked_at
+- created_at
 
-(etc…)
+### GOALS
+- id (UUID)
+- habit_id
+- goal_target
+- goal_type
+- progress
+- created_at
+
+### CHALLENGES
+- id (UUID)
+- title 
+- description
+- duration_days
+- start_date
+- created_at
+
+### CHALLENGE_PARTICIPANTS
+- id (UUID)
+- challenge_id
+- user_id
+- progress
+- joined_at
+
+### CATEGORIES
+- id (UUID)
+- user_id
+- name
+- created_at
 
 ---
 

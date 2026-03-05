@@ -108,3 +108,25 @@ export const logHabit = async (req, res, next) => {
     next(error);
   }
 };
+
+export const markHabitComplete = async (req, res) => {
+  try {
+    const habitId = req.params.id;
+
+    const { error } = await supabase
+      .from("habit_logs")
+      .insert([
+        {
+          habit_id: habitId,
+          completed_date: new Date().toISOString().split("T")[0]
+        }
+      ]);
+
+    if (error) throw error;
+
+    res.json({ message: "Habit marked as completed" });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

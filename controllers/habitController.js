@@ -112,21 +112,46 @@ export const logHabit = async (req, res, next) => {
 export const markHabitComplete = async (req, res) => {
   try {
     const habitId = req.params.id;
+    const today = new Date().toISOString().split("T")[0];
 
-    const { error } = await supabase
+    // check if already completed
+    const { data: existing, error: checkError } = await supabase
+      .from("habit_logs")
+      .select("*")
+      .eq("habit_id", habitId)
+      .eq("completed_date", today);
+
+    if (checkError) throw checkError;
+
+    if (existing.length > 0) {
+      return res.status(400).json({
+        message: "Habit already completed today"
+      });
+    }
+
+    const { data, error } = await supabase
       .from("habit_logs")
       .insert([
         {
           habit_id: habitId,
-          completed_date: new Date().toISOString().split("T")[0]
+          completed_date: today,
+          value: 1
         }
       ]);
 
     if (error) throw error;
 
-    res.json({ message: "Habit marked as completed" });
+    res.status(200).json({ 
+      message: "Habit marked as completed",
+      data
+    });
 
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Mark habit error:", error);
+
+    res.status(500).json({ 
+      message: "Failed to mark habit complete",
+      error: error.message 
+    });
   }
 };
